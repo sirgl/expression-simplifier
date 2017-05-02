@@ -1,6 +1,6 @@
 package sirgl.nodes;
 
-public class BinaryExpr extends Node {
+public abstract class BinaryExpr extends Node {
     protected Node left;
     protected Node right;
 
