@@ -4,28 +4,27 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LexerTestUtils {
     private LexerTestUtils() {
     }
 
-    public static Lexer makeLexer(String str) throws IOException {
-        return new LangLexer(new StringReader(str));
+    public static TokenStream makeTokenStream(String str) throws IOException {
+        return new LangTokenStream(new StringReader(str));
     }
 
-    public static List<Token> readUntilEof(Lexer lexer) throws IOException {
-        Token token = lexer.next();
+    public static List<Token> readUntilEof(TokenStream tokenStream) throws IOException {
+        Token token = tokenStream.next();
         List<Token> tokens = new ArrayList<>();
         while (token != null) {
             tokens.add(token);
-            token = lexer.next();
+            token = tokenStream.next();
         }
         return tokens;
     }
 
     public static List<Token> readUntilEof(String str) throws IOException {
-        return readUntilEof(makeLexer(str));
+        return readUntilEof(makeTokenStream(str));
     }
 
     public static List<TokenType> toTokenTypes(List<Token> tokens) {

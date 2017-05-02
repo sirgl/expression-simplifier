@@ -5,24 +5,24 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static sirgl.lexer.LexerTestUtils.makeLexer;
+import static sirgl.lexer.LexerTestUtils.makeTokenStream;
 import static sirgl.lexer.LexerTestUtils.readUntilEof;
 
-public class LexerTest {
+public class TokenStreamTest {
     @Test
     public void spacingSkipped() throws Exception {
-        assertThat(makeLexer("  (").next())
+        assertThat(makeTokenStream("  (").next())
                 .isEqualTo(new Token(TokenType.Lparen, 2, "("));
     }
 
     @Test
     public void nullOnEmptyInput() throws IOException {
-        assertThat(makeLexer("").next()).isNull();
+        assertThat(makeTokenStream("").next()).isNull();
     }
 
     @Test
     public void nullOnSpacingInput() throws IOException {
-        assertThat(makeLexer(" ").next()).isNull();
+        assertThat(makeTokenStream(" ").next()).isNull();
     }
 
     @Test

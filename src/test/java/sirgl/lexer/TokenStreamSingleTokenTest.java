@@ -9,21 +9,21 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static sirgl.lexer.LexerTestUtils.makeLexer;
+import static sirgl.lexer.LexerTestUtils.makeTokenStream;
 
 @RunWith(Parameterized.class)
-public class LexerSingleTokenTest {
+public class TokenStreamSingleTokenTest {
     private final String str;
     private TokenType tokenType;
 
-    public LexerSingleTokenTest(String str, TokenType tokenType) {
+    public TokenStreamSingleTokenTest(String str, TokenType tokenType) {
         this.str = str;
         this.tokenType = tokenType;
     }
 
     @Test
     public void singleToken() throws IOException {
-        assertThat(makeLexer(str).next().getType())
+        assertThat(makeTokenStream(str).next().getType())
                 .isEqualTo(tokenType);
     }
 

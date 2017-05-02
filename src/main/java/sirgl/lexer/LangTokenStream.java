@@ -3,12 +3,12 @@ package sirgl.lexer;
 import java.io.IOException;
 import java.io.Reader;
 
-public class LangLexer implements Lexer {
+public class LangTokenStream implements TokenStream {
     private final Reader reader;
     private int nextCharPosition = -1;
     private int nextChar;
 
-    public LangLexer(Reader reader) throws IOException {
+    public LangTokenStream(Reader reader) throws IOException {
         this.reader = reader;
         readNextChar();
     }
