@@ -20,7 +20,7 @@ public class LangLexer implements Lexer {
 
     @Override
     public Token next() throws IOException {
-        while (nextChar == ' ') {
+        while (isSpacingLetter(nextChar)) {
             readNextChar();
         }
         int first = this.nextChar;
@@ -36,8 +36,27 @@ public class LangLexer implements Lexer {
         } else if (isProbablyOperatorLetter(first)) {
             return parseOperator();
         } else {
-            return tokenFromCurrentLetter(TokenType.Error);
+            return parseUnknownInput();
         }
+    }
+
+    private boolean isSpacingLetter(int ch) {
+        return ch == ' ';
+    }
+
+    private Token parseUnknownInput() throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        int startPosition = nextCharPosition;
+        while (nextChar != -1
+                && !isIdentifierLetter(nextChar)
+                && !isProbablyOperatorLetter(nextChar)
+                && nextChar != '('
+                && nextChar != ')'
+                && !isSpacingLetter(nextChar)) {
+            stringBuilder.append((char) nextChar);
+            readNextChar();
+        }
+        return new Token(TokenType.Error, startPosition, stringBuilder.toString());
     }
 
     private Token tokenFromCurrentLetter(TokenType type) throws IOException {

@@ -66,12 +66,22 @@ public class LexerTest {
     }
 
     @Test
-    public void errorHandling() throws Exception {
+    public void wrongOperator() throws Exception {
         assertThat(readUntilEof("a BAD b"))
                 .containsExactly(
                         new Token(TokenType.Identifier, 0, "a"),
                         new Token(TokenType.Error, 2, "BAD"),
                         new Token(TokenType.Identifier, 6, "b")
+                );
+    }
+
+    @Test
+    public void nonLatinInput() throws Exception {
+        assertThat(readUntilEof("a && b"))
+                .containsExactly(
+                        new Token(TokenType.Identifier, 0, "a"),
+                        new Token(TokenType.Error, 2, "&&"),
+                        new Token(TokenType.Identifier, 5, "b")
                 );
     }
 
