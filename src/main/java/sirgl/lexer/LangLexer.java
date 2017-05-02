@@ -34,7 +34,7 @@ public class LangLexer implements Lexer {
         } else if (isIdentifierLetter(first)) {
             return parseIdentifier();
         } else if (isProbablyOperatorLetter(first)) {
-            return parseOperator();
+            return parseKeyword();
         } else {
             return parseUnknownInput();
         }
@@ -85,14 +85,14 @@ public class LangLexer implements Lexer {
         return new Token(TokenType.Identifier, startPosition, stringBuilder.toString());
     }
 
-    private Token parseOperator() throws IOException {
+    private Token parseKeyword() throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         int startPosition = nextCharPosition;
         while (nextChar != -1 && isProbablyOperatorLetter(nextChar)) {
             stringBuilder.append((char) nextChar);
             readNextChar();
             String token = stringBuilder.toString();
-            if (token.length() <= 3) {
+            if (token.length() <= 5) {
                 switch (token) {
                     case "AND":
                         return new Token(TokenType.And, startPosition, token);
@@ -100,6 +100,10 @@ public class LangLexer implements Lexer {
                         return new Token(TokenType.Or, startPosition, token);
                     case "NOT":
                         return new Token(TokenType.Not, startPosition, token);
+                    case "TRUE":
+                        return new Token(TokenType.True, startPosition, token);
+                    case "FALSE":
+                        return new Token(TokenType.False, startPosition, token);
                 }
             }
         }

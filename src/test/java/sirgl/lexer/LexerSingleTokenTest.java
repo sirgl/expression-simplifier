@@ -36,6 +36,8 @@ public class LexerSingleTokenTest {
                 {"OR", TokenType.Or},
                 {"test", TokenType.Identifier},
                 {"BAD", TokenType.Error},
+                {"TRUE", TokenType.True},
+                {"FALSE", TokenType.False},
         });
     }
 }
