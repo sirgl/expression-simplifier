@@ -1,13 +1,14 @@
 package sirgl.nodes;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class BinaryExpr extends Node {
     protected Node left;
     protected Node right;
 
-    public BinaryExpr(Node parent, Node left, Node right) {
+    public BinaryExpr(Node parent) {
         super(parent);
-        this.left = left;
-        this.right = right;
     }
 
     public Node getLeft() {
@@ -16,5 +17,36 @@ public abstract class BinaryExpr extends Node {
 
     public Node getRight() {
         return right;
+    }
+
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+
+    public void setRight(Node right) {
+        this.right = right;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BinaryExpr that = (BinaryExpr) o;
+
+        if (!left.equals(that.left)) return false;
+        return right.equals(that.right);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = left.hashCode();
+        result = 31 * result + right.hashCode();
+        return result;
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return Arrays.asList(left, right);
     }
 }

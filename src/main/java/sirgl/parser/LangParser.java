@@ -1,18 +1,12 @@
 package sirgl.parser;
 
-import org.assertj.core.util.Lists;
 import sirgl.lexer.Token;
 import sirgl.lexer.TokenStream;
 import sirgl.lexer.TokenType;
-import sirgl.nodes.Identifier;
-import sirgl.nodes.Literal;
-import sirgl.nodes.Node;
-import sirgl.nodes.ParenWrapper;
+import sirgl.nodes.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class LangParser implements Parser {
     private static final Set<TokenType> firstPrimaryTokens = new HashSet<>();
@@ -35,56 +29,109 @@ public class LangParser implements Parser {
         firstExpressionTokens.addAll(firstTermTokens);
     }
 
-    @Override
-    public Node parse(TokenStream tokenStream) throws IOException {
-        return parseExpression(tokenStream, tokenStream.next(), null);
+    private Token nextToken;
+    private boolean nextUsed = true;
+    private TokenStream tokenStream;
+
+    public LangParser(TokenStream tokenStream) {
+        this.tokenStream = tokenStream;
     }
 
-    private Node parsePrimary(TokenStream tokenStream, Token currentToken, Node parent) throws IOException, UnexpectedTokenException {
-        switch (currentToken.getType()) {
+
+    private void assertSuitableFirstToken(Set<TokenType> firstTokens) throws ParsingException {
+        if(nextToken == null) {
+            throw new UnexpectedTokensEnd();
+        }
+        if(!firstTokens.contains(nextToken.getType())) {
+            throw new UnexpectedTokenException(nextToken, new ArrayList<>(firstTokens));
+        }
+        nextUsed = true;
+    }
+
+    private void getNextToken() throws IOException {
+        if(nextUsed) {
+            nextToken = tokenStream.next();
+            nextUsed = false;
+        }
+    }
+
+    private void lookNextToken() throws IOException {
+        nextToken = tokenStream.next();
+        nextUsed = false;
+    }
+
+    private Node tryParsePrimary(Node parent) throws ParsingException, IOException {
+        assertSuitableFirstToken(firstPrimaryTokens);
+        switch (nextToken.getType()) {
             case True:
                 return new Literal(parent, true);
             case False:
                 return new Literal(parent, false);
             case Identifier:
-                return new Identifier(parent, currentToken.getValue());
+                return new Identifier(parent, nextToken.getValue());
             case Lparen:
-                Token next = tokenStream.next();
-                if(!startsLikeExpression(next)) {
-                    throw new UnexpectedTokenException(next, new ArrayList<>(firstPrimaryTokens));
-                }
                 ParenWrapper parenWrapper = new ParenWrapper(parent);
-                Node expression = parseExpression(tokenStream, next, parenWrapper);
+                getNextToken();
+                Node expression = tryParseExpression(parenWrapper);
+                getNextToken();
+                if(nextToken.getType() != TokenType.Rparen) {
+                    throw new UnexpectedTokenException(nextToken, Collections.singletonList(TokenType.Rparen));
+                }
                 parenWrapper.setValue(expression);
                 return parenWrapper;
+            default: // It could never happen!
+                throw new UnexpectedTokenException(nextToken, new ArrayList<>(firstPrimaryTokens));
         }
     }
 
-    private boolean startsLikePrimary(Token currentToken) {
-        return firstPrimaryTokens.contains(currentToken.getType());
+    private Node tryParseFactor(Node parent) throws IOException, ParsingException {
+        assertSuitableFirstToken(firstFactorTokens);
+        if(nextToken.getType() == TokenType.Not) {
+            Not notNode = new Not(parent);
+            getNextToken();
+            Node primary = tryParsePrimary(notNode);
+            notNode.setExpression(primary);
+            return notNode;
+        } else {
+            return tryParsePrimary(parent);
+        }
     }
 
-    private Node parseFactor(TokenStream tokenStream, Token currentToken, Node parent) {
-
+    private Node tryParseExpression(Node parent) throws IOException, ParsingException {
+        assertSuitableFirstToken(firstExpressionTokens);
+        Node term = tryParseTerm(parent);
+        lookNextToken();
+        if(nextToken != null && nextToken.getType() == TokenType.Or) {
+            Or orExpr = new Or(parent);
+            orExpr.setLeft(term);
+            term.setParent(orExpr);
+            lookNextToken();
+            Node right = tryParseTerm(orExpr);
+            orExpr.setRight(right);
+            return orExpr;
+        }
+        return term;
     }
 
-    private boolean startsLikeFactor(Token currentToken) {
-        return firstFactorTokens.contains(currentToken.getType());
+    private Node tryParseTerm(Node parent) throws IOException, ParsingException {
+        assertSuitableFirstToken(firstTermTokens);
+        Node factor = tryParseFactor(parent);
+        lookNextToken();
+        if(nextToken != null && nextToken.getType() == TokenType.And) {
+            And andExpr = new And(parent);
+            andExpr.setLeft(factor);
+            factor.setParent(andExpr);
+            lookNextToken();
+            Node expr = tryParseFactor(andExpr);
+            andExpr.setRight(expr);
+            return andExpr;
+        }
+        return factor;
     }
 
-    private Node parseTerm(TokenStream tokenStream, Token currentToken, Node parent) {
-
-    }
-
-    private boolean startsLikeTerm(Token currentToken) {
-        return firstTermTokens.contains(currentToken.getType());
-    }
-
-    private Node parseExpression(TokenStream tokenStream, Token currentToken, Node parent) {
-
-    }
-
-    private boolean startsLikeExpression(Token currentToken) {
-        return firstExpressionTokens.contains(currentToken.getType());
+    @Override
+    public Node parse() throws IOException, ParsingException {
+        getNextToken();
+        return tryParseExpression(null);
     }
 }

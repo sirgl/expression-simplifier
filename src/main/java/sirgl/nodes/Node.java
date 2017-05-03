@@ -4,21 +4,18 @@ import java.util.List;
 
 public abstract class Node {
     private Node parent;
-    private List<Node> children;
 
     public Node(Node parent) {
         this.parent = parent;
     }
 
-    public List<Node> getChildren() {
-        return children;
-    }
+    public abstract List<Node> getChildren();
 
     public Node getParent() {
         return parent;
     }
 
-    protected void addChild(Node child) {
-        children.add(child);
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
 }

@@ -1,5 +1,8 @@
 package sirgl.nodes;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Identifier extends Node {
     private String name;
 
@@ -10,5 +13,32 @@ public class Identifier extends Node {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Identifier that = (Identifier) o;
+
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String toString() {
+        return "Identifier{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
