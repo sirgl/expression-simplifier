@@ -3,9 +3,7 @@ package sirgl.analysis;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import sirgl.analysis.rules.DeMorganRule;
-import sirgl.analysis.rules.DoubleNotRule;
-import sirgl.analysis.rules.NotLiteralRule;
+import sirgl.analysis.rules.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +15,9 @@ public class ExpressionSimplifierTest {
     private ExpressionSimplifier simplifier = new ExpressionSimplifier(Arrays.asList(
             new NotLiteralRule(),
             new DoubleNotRule(),
-            new DeMorganRule()
+            new DeMorganRule(),
+            new LiteralAndExprRule(),
+            new LiteralOrExprRule()
     ));
 
     private String before;
@@ -45,6 +45,8 @@ public class ExpressionSimplifierTest {
                 {"NOT (a AND b)", "NOT (a) OR NOT (b)"},
                 {"NOT (a OR b)", "NOT (a) AND NOT (b)"},
                 {"NOT (a OR NOT b)", "NOT (a) AND b"},
+                {"NOT FALSE AND FALSE", "FALSE"},
+                {"NOT FALSE OR FALSE", "TRUE"},
         });
     }
 }
