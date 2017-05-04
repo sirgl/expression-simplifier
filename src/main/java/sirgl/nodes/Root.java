@@ -20,6 +20,7 @@ public class Root extends Node {
 
     @Override
     public void accept(NodeVisitor visitor) {
+        visitor.visitRoot(this);
     }
 
     public Node getValue() {

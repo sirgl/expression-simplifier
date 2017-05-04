@@ -8,6 +8,10 @@ public class SimplificationResult {
     private List<AnalysisError> errors;
     private Node result;
 
+    public SimplificationResult(Node result) {
+        this.result = result;
+    }
+
     public boolean hasErrors() {
         return errors.size() > 0;
     }

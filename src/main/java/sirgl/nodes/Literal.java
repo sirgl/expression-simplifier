@@ -43,6 +43,6 @@ public class Literal extends Node {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return value ? "TRUE" : "FALSE";
     }
 }
