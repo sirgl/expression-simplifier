@@ -21,6 +21,7 @@ public class ParenWrapper extends Node {
 
     public void setValue(Node value) {
         this.value = value;
+        value.setParent(this);
     }
 
     @Override

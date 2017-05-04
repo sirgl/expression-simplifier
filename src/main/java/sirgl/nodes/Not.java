@@ -12,6 +12,7 @@ public class Not extends Node {
 
     public void setExpression(Node expression) {
         this.expression = expression;
+        expression.setParent(this);
     }
 
     public Node getExpression() {

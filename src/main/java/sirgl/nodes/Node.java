@@ -20,4 +20,9 @@ public abstract class Node {
     public void setParent(Node parent) {
         this.parent = parent;
     }
+
+    public void replace(Node replacement) {
+        ChildReplacingVisitor visitor = new ChildReplacingVisitor(this, replacement);
+        getParent().accept(visitor);
+    }
 }
