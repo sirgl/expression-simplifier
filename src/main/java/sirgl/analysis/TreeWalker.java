@@ -16,7 +16,11 @@ public class TreeWalker {
         Node newNode = action.apply(node);
         List<Node> children;
         if(newNode != null) {
-            walk(newNode);
+            if(newNode.getParent() != null) {
+                walk(newNode.getParent());
+            } else {
+                walk(newNode);
+            }
         } else {
             children = node.getChildren();
             for (Node child : children) {

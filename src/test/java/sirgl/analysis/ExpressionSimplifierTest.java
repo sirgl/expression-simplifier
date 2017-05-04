@@ -3,7 +3,8 @@ package sirgl.analysis;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import sirgl.analysis.rules.NotLiteralReplacementRule;
+import sirgl.analysis.rules.DoubleNotRule;
+import sirgl.analysis.rules.NotLiteralRule;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class ExpressionSimplifierTest {
     private ExpressionSimplifier simplifier = new ExpressionSimplifier(Arrays.asList(
-            new NotLiteralReplacementRule()
+            new NotLiteralRule(),
+            new DoubleNotRule()
     ));
 
     private String before;
@@ -36,6 +38,8 @@ public class ExpressionSimplifierTest {
         return Arrays.asList(new Object[][]{
                 {"NOT TRUE", "FALSE"},
                 {"NOT FALSE", "TRUE"},
+                {"NOT (NOT a)", "a"},
+                {"NOT (NOT TRUE)", "TRUE"},
         });
     }
 }

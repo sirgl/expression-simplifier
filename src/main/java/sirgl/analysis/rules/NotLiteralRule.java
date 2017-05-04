@@ -4,7 +4,7 @@ import sirgl.nodes.Literal;
 import sirgl.nodes.Node;
 import sirgl.nodes.Not;
 
-public class NotLiteralReplacementRule implements ReplacementRule<Not> {
+public class NotLiteralRule implements ReplacementRule<Not> {
     @Override
     public String getName() {
         return "Not literal";
