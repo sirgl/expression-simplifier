@@ -5,8 +5,12 @@ public class Or extends BinaryExpr {
         super(parent);
     }
 
+
     @Override
     public String toString() {
-        return "Or{}";
+        return "Or{" +
+                "left=" + left +
+                ", right=" + right +
+                '}';
     }
 }

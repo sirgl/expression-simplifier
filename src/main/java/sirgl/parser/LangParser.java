@@ -7,6 +7,7 @@ import sirgl.nodes.*;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 public class LangParser implements Parser {
     private static final Set<TokenType> firstPrimaryTokens = new HashSet<>();
@@ -30,7 +31,7 @@ public class LangParser implements Parser {
     }
 
     private Token nextToken;
-    private boolean nextUsed = true;
+    private boolean lookAhead = false;
     private TokenStream tokenStream;
 
     public LangParser(TokenStream tokenStream) {
@@ -45,19 +46,21 @@ public class LangParser implements Parser {
         if(!firstTokens.contains(nextToken.getType())) {
             throw new UnexpectedTokenException(nextToken, new ArrayList<>(firstTokens));
         }
-        nextUsed = true;
     }
 
-    private void getNextToken() throws IOException {
-        if(nextUsed) {
+    private void lookAhead() throws IOException {
+        if(!lookAhead) {
             nextToken = tokenStream.next();
-            nextUsed = false;
+            lookAhead = true;
         }
     }
 
-    private void lookNextToken() throws IOException {
-        nextToken = tokenStream.next();
-        nextUsed = false;
+    private void getNext() throws IOException {
+        if(lookAhead) {
+            lookAhead = false;
+        } else {
+            nextToken = tokenStream.next();
+        }
     }
 
     private Node tryParsePrimary(Node parent) throws ParsingException, IOException {
@@ -71,9 +74,9 @@ public class LangParser implements Parser {
                 return new Identifier(parent, nextToken.getValue());
             case Lparen:
                 ParenWrapper parenWrapper = new ParenWrapper(parent);
-                getNextToken();
+                getNext();
                 Node expression = tryParseExpression(parenWrapper);
-                getNextToken();
+                getNext();
                 if(nextToken.getType() != TokenType.Rparen) {
                     throw new UnexpectedTokenException(nextToken, Collections.singletonList(TokenType.Rparen));
                 }
@@ -88,7 +91,7 @@ public class LangParser implements Parser {
         assertSuitableFirstToken(firstFactorTokens);
         if(nextToken.getType() == TokenType.Not) {
             Not notNode = new Not(parent);
-            getNextToken();
+            getNext();
             Node primary = tryParsePrimary(notNode);
             notNode.setExpression(primary);
             return notNode;
@@ -99,39 +102,44 @@ public class LangParser implements Parser {
 
     private Node tryParseExpression(Node parent) throws IOException, ParsingException {
         assertSuitableFirstToken(firstExpressionTokens);
-        Node term = tryParseTerm(parent);
-        lookNextToken();
-        if(nextToken != null && nextToken.getType() == TokenType.Or) {
-            Or orExpr = new Or(parent);
-            orExpr.setLeft(term);
-            term.setParent(orExpr);
-            lookNextToken();
-            Node right = tryParseTerm(orExpr);
-            orExpr.setRight(right);
-            return orExpr;
-        }
-        return term;
+        return tryParseSequence(this::tryParseTerm, parent, TokenType.Or, Or::new);
     }
 
     private Node tryParseTerm(Node parent) throws IOException, ParsingException {
         assertSuitableFirstToken(firstTermTokens);
-        Node factor = tryParseFactor(parent);
-        lookNextToken();
-        if(nextToken != null && nextToken.getType() == TokenType.And) {
-            And andExpr = new And(parent);
-            andExpr.setLeft(factor);
-            factor.setParent(andExpr);
-            lookNextToken();
-            Node expr = tryParseFactor(andExpr);
-            andExpr.setRight(expr);
-            return andExpr;
-        }
-        return factor;
+        return tryParseSequence(this::tryParseFactor, parent, TokenType.And, And::new);
     }
 
     @Override
     public Node parse() throws IOException, ParsingException {
-        getNextToken();
+        getNext();
         return tryParseExpression(null);
+    }
+
+    private <T extends BinaryExpr>Node tryParseSequence(
+            ParseFunction parseFunction,
+            Node parent,
+            TokenType operator,
+            Function<Node, T> factory)
+            throws IOException, ParsingException {
+        Node first = parseFunction.parse(parent);
+        Node left = first;
+        T top = null;
+        lookAhead();
+        while (nextToken != null && nextToken.getType() == operator) {
+            top = factory.apply(parent);
+            top.setLeft(left);
+            left.setParent(top);
+            getNext(); // skip
+            getNext(); // prepare
+            Node right = parseFunction.parse(top);
+            top.setRight(right);
+            left = top;
+            lookAhead();
+        }
+        if(top != null) {
+            return top;
+        }
+        return first;
     }
 }
