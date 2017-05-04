@@ -1,6 +1,7 @@
 package sirgl.analysis;
 
 import sirgl.nodes.Node;
+import sirgl.nodes.ParenWrapper;
 
 import java.util.List;
 import java.util.function.Function;
@@ -16,8 +17,13 @@ public class TreeWalker {
         Node newNode = action.apply(node);
         List<Node> children;
         if(newNode != null) {
-            if(newNode.getParent() != null) {
-                walk(newNode.getParent());
+            Node parent = newNode.getParent();
+            if(parent != null) {
+                if(parent.getClass().equals(ParenWrapper.class)) {
+                    walkParenWrapperParent(parent);
+                } else {
+                    walk(parent);
+                }
             } else {
                 walk(newNode);
             }
@@ -26,6 +32,15 @@ public class TreeWalker {
             for (Node child : children) {
                 walk(child);
             }
+        }
+    }
+
+    private void walkParenWrapperParent(Node parent) {
+        Node parenParent = parent.getParent();
+        if(parenParent != null) {
+            walk(parenParent);
+        } else {
+            walk(parent);
         }
     }
 }
