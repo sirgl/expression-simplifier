@@ -21,7 +21,7 @@ public abstract class Node {
         this.parent = parent;
     }
 
-    public void replace(Node replacement) {
+    public void replaceTo(Node replacement) {
         ChildReplacingVisitor visitor = new ChildReplacingVisitor(this, replacement);
         getParent().accept(visitor);
     }

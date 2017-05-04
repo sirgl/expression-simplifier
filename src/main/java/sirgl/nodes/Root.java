@@ -32,7 +32,7 @@ public class Root extends Node {
     }
 
     @Override
-    public void replace(Node replacement) {
+    public void replaceTo(Node replacement) {
         throw new UnsupportedOperationException("Root can't be replaced");
     }
 
