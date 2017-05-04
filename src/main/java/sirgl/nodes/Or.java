@@ -5,6 +5,11 @@ public class Or extends BinaryExpr {
         super(parent);
     }
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitOr(this);
+    }
+
 
     @Override
     public String toString() {

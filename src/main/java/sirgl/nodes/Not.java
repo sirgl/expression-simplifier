@@ -39,6 +39,11 @@ public class Not extends Node {
     }
 
     @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitNot(this);
+    }
+
+    @Override
     public String toString() {
         return "Not{" +
                 "expression=" + expression +

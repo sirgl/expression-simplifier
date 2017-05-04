@@ -36,6 +36,11 @@ public class Identifier extends Node {
     }
 
     @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitIdentifier(this);
+    }
+
+    @Override
     public String toString() {
         return "Identifier{" +
                 "name='" + name + '\'' +

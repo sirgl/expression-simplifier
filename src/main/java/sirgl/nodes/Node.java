@@ -15,6 +15,8 @@ public abstract class Node {
         return parent;
     }
 
+    public abstract void accept(NodeVisitor visitor);
+
     public void setParent(Node parent) {
         this.parent = parent;
     }

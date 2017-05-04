@@ -6,6 +6,11 @@ public class And extends BinaryExpr {
     }
 
     @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitAnd(this);
+    }
+
+    @Override
     public String toString() {
         return "And{" +
                 "left=" + left +

@@ -37,6 +37,11 @@ public class Literal extends Node {
     }
 
     @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitLiteral(this);
+    }
+
+    @Override
     public String toString() {
         return "Literal{" +
                 "value=" + value +

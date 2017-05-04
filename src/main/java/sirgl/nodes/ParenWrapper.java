@@ -10,6 +10,11 @@ public class ParenWrapper extends Node {
         super(parent);
     }
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitParenWrapper(this);
+    }
+
     public Node getValue() {
         return value;
     }
