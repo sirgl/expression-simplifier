@@ -43,8 +43,6 @@ public class Literal extends Node {
 
     @Override
     public String toString() {
-        return "Literal{" +
-                "value=" + value +
-                '}';
+        return String.valueOf(value);
     }
 }

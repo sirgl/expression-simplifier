@@ -12,9 +12,6 @@ public class And extends BinaryExpr {
 
     @Override
     public String toString() {
-        return "And{" +
-                "left=" + left +
-                ", right=" + right +
-                '}';
+        return left + " AND " + right;
     }
 }

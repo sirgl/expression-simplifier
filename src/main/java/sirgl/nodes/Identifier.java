@@ -42,8 +42,6 @@ public class Identifier extends Node {
 
     @Override
     public String toString() {
-        return "Identifier{" +
-                "name='" + name + '\'' +
-                '}';
+        return name;
     }
 }

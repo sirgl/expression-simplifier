@@ -45,8 +45,6 @@ public class ParenWrapper extends Node {
 
     @Override
     public String toString() {
-        return "ParenWrapper{" +
-                "value=" + value +
-                '}';
+        return "(" + value + ")";
     }
 }

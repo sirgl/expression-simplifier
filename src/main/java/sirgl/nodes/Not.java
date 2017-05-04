@@ -45,8 +45,6 @@ public class Not extends Node {
 
     @Override
     public String toString() {
-        return "Not{" +
-                "expression=" + expression +
-                '}';
+        return "Not{" + expression;
     }
 }
