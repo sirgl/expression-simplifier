@@ -16,12 +16,12 @@ public class TreeWalker {
         Node newNode = action.apply(node);
         List<Node> children;
         if(newNode != null) {
-            children = newNode.getChildren();
+            walk(newNode);
         } else {
             children = node.getChildren();
-        }
-        for (Node child : children) {
-            action.apply(child);
+            for (Node child : children) {
+                walk(child);
+            }
         }
     }
 }

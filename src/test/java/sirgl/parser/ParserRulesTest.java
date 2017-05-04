@@ -111,14 +111,9 @@ public class ParserRulesTest {
         assertThat(parseStr("(a AND TRUE AND (b)) OR c")).isEqualTo(or);
     }
 
-    @Test
+    @Test(expected = UnexpectedTokenException.class)
     public void errorHandling() throws Exception {
-        try {
             parseStr("AND");
-        } catch (UnexpectedTokenException e) {
-            assertThat(e).isEqualToComparingFieldByField(new UnexpectedTokenException(new Token(TokenType.And, 0, "AND"),
-                    Arrays.asList(TokenType.Not, TokenType.False, TokenType.Identifier, TokenType.Lparen, TokenType.True)));
-        }
     }
 
 }
