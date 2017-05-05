@@ -1,6 +1,6 @@
 package sirgl.nodes;
 
-import sirgl.analysis.operands.OperandChain;
+import sirgl.nodes.operands.OperandChain;
 
 import java.util.ArrayList;
 import java.util.Collections;

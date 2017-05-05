@@ -1,6 +1,6 @@
 package sirgl.nodes;
 
-import sirgl.analysis.operands.OperandChain;
+import sirgl.nodes.operands.OperandChain;
 
 public class And extends BinaryExpr {
     private OperandChain<And> operandChain;

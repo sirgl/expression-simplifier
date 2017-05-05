@@ -1,11 +1,10 @@
-package sirgl.analysis.operands;
+package sirgl.nodes.operands;
 
 import sirgl.nodes.BinaryExpr;
 import sirgl.nodes.Node;
 
 import java.util.List;
 
-//Like set of conjuncts
 public class OperandChain<T extends BinaryExpr> {
     private List<Node> operands;
     private boolean isActive = true;

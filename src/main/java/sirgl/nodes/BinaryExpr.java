@@ -1,7 +1,5 @@
 package sirgl.nodes;
 
-import sirgl.analysis.operands.OperandChain;
-
 import java.util.Arrays;
 import java.util.List;
 
