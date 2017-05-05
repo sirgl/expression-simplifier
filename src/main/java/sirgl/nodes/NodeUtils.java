@@ -5,6 +5,7 @@ import sirgl.nodes.chains.OperandChain;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class NodeUtils {
     public static ParenWrapper wrap(Node data, Node parent) {
@@ -96,5 +97,16 @@ public class NodeUtils {
             expr.setRight(node2);
             return expr;
         });
+    }
+
+    public static Node findUpper(Node node, Predicate<Node> predicate) {
+        Node current = node.getParent();
+        while (current != null) {
+            if(predicate.test(current)) {
+                return current;
+            }
+            current = current.getParent();
+        }
+        return null;
     }
 }
