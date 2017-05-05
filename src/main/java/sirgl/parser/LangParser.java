@@ -41,7 +41,7 @@ public class LangParser implements Parser {
 
     private void assertSuitableFirstToken(Set<TokenType> firstTokens) throws ParsingException {
         if(nextToken == null) {
-            throw new UnexpectedTokensEnd();
+            throw new UnexpectedTokensEnd(firstTokens);
         }
         if(!firstTokens.contains(nextToken.getType())) {
             throw new UnexpectedTokenException(nextToken, new ArrayList<>(firstTokens));

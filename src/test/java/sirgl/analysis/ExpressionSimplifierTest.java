@@ -47,6 +47,7 @@ public class ExpressionSimplifierTest {
                 {"NOT (a OR NOT b)", "NOT (a) AND b"},
                 {"NOT FALSE AND FALSE", "FALSE"},
                 {"NOT FALSE OR FALSE", "TRUE"},
+                {"a AND TRUE", "a"},
         });
     }
 }

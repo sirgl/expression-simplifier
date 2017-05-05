@@ -1,5 +1,6 @@
 package sirgl.console;
 
+import sirgl.analysis.ExpressionSimplifier;
 import sirgl.nodes.Node;
 
 import java.io.BufferedReader;
@@ -7,12 +8,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ConsoleInterface implements Runnable {
+    private final ExpressionSimplifier simplifier;
+
+    public ConsoleInterface(ExpressionSimplifier simplifier) {
+        this.simplifier = simplifier;
+    }
+
     @Override
     public void run() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             while (true) {
-                System.out.println("> ");
+                System.out.print("> ");
                 String line = reader.readLine();
                 if(line.length() == 0) {
                     continue;
@@ -43,6 +50,6 @@ public class ConsoleInterface implements Runnable {
     }
 
     private Node simplifyExpression(String expr) {
-        return null;
+        return simplifier.simplify(expr).getResult();
     }
 }

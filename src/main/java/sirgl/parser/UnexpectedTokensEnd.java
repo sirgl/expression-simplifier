@@ -1,10 +1,13 @@
 package sirgl.parser;
 
-import sirgl.lexer.Token;
+import sirgl.lexer.TokenType;
+
+import java.util.Set;
 
 public class UnexpectedTokensEnd extends ParsingException {
-    private Token token;
+    private Set<TokenType> expectedTokens;
 
-    public UnexpectedTokensEnd() {
+    public UnexpectedTokensEnd(Set<TokenType> expectedTokens) {
+        this.expectedTokens = expectedTokens;
     }
 }

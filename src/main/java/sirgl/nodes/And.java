@@ -1,6 +1,10 @@
 package sirgl.nodes;
 
+import sirgl.analysis.operands.OperandChain;
+
 public class And extends BinaryExpr {
+    private OperandChain<And> operandChain;
+
     public And(Node parent) {
         super(parent);
     }
@@ -13,5 +17,13 @@ public class And extends BinaryExpr {
     @Override
     public String toString() {
         return left + " AND " + right;
+    }
+
+    public OperandChain<And> getOperandChain() {
+        if(operandChain != null && operandChain.isActive()) {
+            return operandChain;
+        }
+        operandChain = NodeUtils.getMaxOperandChain(this);
+        return operandChain;
     }
 }
