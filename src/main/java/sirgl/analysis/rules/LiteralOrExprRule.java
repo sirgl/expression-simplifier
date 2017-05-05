@@ -24,7 +24,7 @@ public class LiteralOrExprRule implements ReplacementRule<Or> {
             } else {
                 return node.getRight();
             }
-        } else if(node.getLeft().getClass().equals(Literal.class)) {
+        } else if(node.getRight().getClass().equals(Literal.class)) {
             Literal literal = (Literal) node.getRight();
             boolean literalValue = literal.getValue();
             if(literalValue) {
