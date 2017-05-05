@@ -18,4 +18,8 @@ public class OperandChain<T extends BinaryExpr> {
     public boolean isActive() {
         return isActive;
     }
+
+    public List<Node> getOperands() {
+        return operands;
+    }
 }
