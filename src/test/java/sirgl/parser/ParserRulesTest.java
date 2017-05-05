@@ -1,11 +1,7 @@
 package sirgl.parser;
 
 import org.junit.Test;
-import sirgl.lexer.Token;
-import sirgl.lexer.TokenType;
 import sirgl.nodes.*;
-
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static sirgl.parser.ParserTestUtils.parseStr;

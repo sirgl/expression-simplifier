@@ -1,6 +1,6 @@
 package sirgl.nodes;
 
-import sirgl.nodes.operands.OperandChain;
+import sirgl.nodes.chains.OperandChain;
 
 public class Or extends BinaryExpr {
     private OperandChain<Or> operandChain;
@@ -24,7 +24,18 @@ public class Or extends BinaryExpr {
         if(operandChain != null && operandChain.isActive()) {
             return operandChain;
         }
-        operandChain = NodeUtils.getMaxOperandChain(this);
+        operandChain = NodeUtils.buildMaxOperandChain(this);
         return operandChain;
+    }
+
+    public void setOperandChain(OperandChain<Or> operandChain) {
+        this.operandChain = operandChain;
+    }
+
+    @Override
+    void invalidateChain() {
+        if(operandChain != null) {
+            operandChain.invalidate();
+        }
     }
 }

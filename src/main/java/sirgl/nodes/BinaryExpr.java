@@ -1,9 +1,9 @@
 package sirgl.nodes;
 
-import sirgl.nodes.operands.OperandChain;
-
 import java.util.Arrays;
 import java.util.List;
+
+import static sirgl.nodes.NodeUtils.*;
 
 public abstract class BinaryExpr extends Node {
     protected Node left;
@@ -38,19 +38,18 @@ public abstract class BinaryExpr extends Node {
 
         BinaryExpr that = (BinaryExpr) o;
 
-        if (!left.equals(that.left)) return false;
-        return right.equals(that.right);
+        return getLowerOperands(this).equals(getLowerOperands(that));
     }
 
     @Override
     public int hashCode() {
-        int result = left.hashCode();
-        result = 31 * result + right.hashCode();
-        return result;
+        return getLowerOperands(this).hashCode();
     }
 
     @Override
     public List<Node> getChildren() {
         return Arrays.asList(left, right);
     }
+
+    abstract void invalidateChain();
 }

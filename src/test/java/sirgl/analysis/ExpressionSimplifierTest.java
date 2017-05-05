@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import sirgl.analysis.rules.*;
+import sirgl.analysis.rules.chains.AndChainRule;
+import sirgl.analysis.rules.chains.OrChainRule;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +19,9 @@ public class ExpressionSimplifierTest {
             new DoubleNotRule(),
             new DeMorganRule(),
             new LiteralAndExprRule(),
-            new LiteralOrExprRule()
+            new LiteralOrExprRule(),
+            new AndChainRule(),
+            new OrChainRule()
     ));
 
     private String before;
@@ -48,6 +52,13 @@ public class ExpressionSimplifierTest {
                 {"NOT FALSE AND FALSE", "FALSE"},
                 {"NOT FALSE OR FALSE", "TRUE"},
                 {"a AND TRUE", "a"},
+                {"a AND NOT a", "FALSE"},
+                {"a AND b AND NOT a", "FALSE"},
+                {"a AND a", "a"},
+                {"a AND b AND a", "a AND b"},
+                {"a OR b OR a", "a OR b"},
+                {"a OR a", "a"},
+                {"a OR NOT a", "TRUE"},
         });
     }
 }

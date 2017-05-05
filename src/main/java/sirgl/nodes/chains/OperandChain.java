@@ -1,4 +1,4 @@
-package sirgl.nodes.operands;
+package sirgl.nodes.chains;
 
 import sirgl.nodes.BinaryExpr;
 import sirgl.nodes.Node;
@@ -21,5 +21,9 @@ public class OperandChain<T extends BinaryExpr> {
 
     public List<Node> getOperands() {
         return operands;
+    }
+
+    public void invalidate() {
+        isActive = false;
     }
 }
