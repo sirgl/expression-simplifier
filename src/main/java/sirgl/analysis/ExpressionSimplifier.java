@@ -46,12 +46,12 @@ public class ExpressionSimplifier {
     private Node acceptNode(Node node) {
         Class<? extends Node> nodeClass = node.getClass();
         List<ReplacementRule<Node>> rules = ruleMap.get(nodeClass);
-        if(rules == null) {
+        if (rules == null) {
             return null;
         }
         for (ReplacementRule<Node> rule : rules) {
             Node replacement = rule.tryReplace(node);
-            if(replacement != null) {
+            if (replacement != null) {
                 return onSuccessfulRuleAppliance(node, replacement);
             }
         }

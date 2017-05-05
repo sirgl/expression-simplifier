@@ -17,17 +17,17 @@ public class LiteralAndExprRule implements ReplacementRule<And> {
 
     @Override
     public Node tryReplace(And node) {
-        if(node.getLeft().getClass().equals(Literal.class)) {
+        if (node.getLeft() instanceof Literal) {
             Literal literal = (Literal) node.getLeft();
-            if(literal.getValue()) {
+            if (literal.getValue()) {
                 return node.getRight();
             } else {
                 return literal;
             }
-        } else if(node.getRight().getClass().equals(Literal.class)) {
+        } else if (node.getRight() instanceof Literal) {
             Literal literal = (Literal) node.getRight();
             boolean literalValue = literal.getValue();
-            if(literalValue) {
+            if (literalValue) {
                 return node.getLeft();
             } else {
                 return literal;

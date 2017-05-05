@@ -109,7 +109,7 @@ public class ParserRulesTest {
 
     @Test(expected = UnexpectedTokenException.class)
     public void errorHandling() throws Exception {
-            parseStr("AND");
+        parseStr("AND");
     }
 
 }

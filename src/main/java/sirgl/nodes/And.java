@@ -11,7 +11,7 @@ public class And extends BinaryExpr {
 
     @Override
     void invalidateChain() {
-        if(operandChain != null) {
+        if (operandChain != null) {
             operandChain.invalidate();
         }
     }
@@ -27,7 +27,7 @@ public class And extends BinaryExpr {
     }
 
     public OperandChain<And> getOperandChain() {
-        if(operandChain != null && operandChain.isActive()) {
+        if (operandChain != null && operandChain.isActive()) {
             return operandChain;
         }
         operandChain = NodeUtils.buildMaxOperandChain(this);

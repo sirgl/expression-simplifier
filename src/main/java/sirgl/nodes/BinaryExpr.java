@@ -3,7 +3,7 @@ package sirgl.nodes;
 import java.util.Arrays;
 import java.util.List;
 
-import static sirgl.nodes.NodeUtils.*;
+import static sirgl.nodes.NodeUtils.getLowerOperands;
 
 public abstract class BinaryExpr extends Node {
     protected Node left;

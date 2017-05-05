@@ -41,7 +41,7 @@ public class ParenWrapper extends Node {
 
     @Override
     public List<Node> getChildren() {
-        return  Collections.singletonList(value);
+        return Collections.singletonList(value);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class NotLiteralRule implements ReplacementRule<Not> {
     @Override
     public Node tryReplace(Not node) {
         Node expression = node.getExpression();
-        if(expression.getClass().equals(Literal.class)) {
+        if (expression instanceof Literal) {
             Literal literal = (Literal) expression;
             return new Literal(null, !literal.getValue());
         }

@@ -18,12 +18,12 @@ public class DeMorganRule implements ReplacementRule<Not> {
     @Override
     public Node tryReplace(Not node) {
         Node expression = node.getExpression();
-        if(expression.getClass().equals(ParenWrapper.class)) {
+        if (expression instanceof ParenWrapper) {
             Node value = ((ParenWrapper) expression).getValue();
-            if(value.getClass().equals(And.class)) {
+            if (value instanceof And) {
                 And and = (And) value;
                 return invert(and, Or::new);
-            } else if (value.getClass().equals(Or.class)) {
+            } else if (value instanceof Or) {
                 Or or = (Or) value;
                 return invert(or, And::new);
             }

@@ -11,7 +11,7 @@ public class ChildReplacingVisitorTest {
     public void replacement() throws Exception {
         Node node = parseStr("(a AND b) OR c");
         Literal literal = new Literal(null, false);
-        ((Or)node).getLeft().replaceTo(literal);
+        ((Or) node).getLeft().replaceTo(literal);
         Or or = new Or(null);
         or.setLeft(literal);
         or.setRight(new Identifier(or, "c"));

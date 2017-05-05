@@ -36,7 +36,7 @@ public class NodeUtils {
     private static List<Node> getUpperOperandChain(BinaryExpr node, Class<? extends BinaryExpr> nodeClass) {
         List<Node> operands = new ArrayList<>();
         Node parent = node.getParent();
-        if(parent == null || !parent.getClass().equals(nodeClass)) {
+        if (parent == null || !parent.getClass().equals(nodeClass)) {
             return operands;
         }
         BinaryExpr current = (BinaryExpr) node.getParent();

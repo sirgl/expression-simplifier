@@ -21,13 +21,13 @@ public class ConsoleInterface implements Runnable {
             while (true) {
                 System.out.print("> ");
                 String line = reader.readLine();
-                if(line.length() == 0) {
+                if (line.length() == 0) {
                     continue;
                 }
-                if(line.trim().equals("exit")) {
+                if (line.trim().equals("exit")) {
                     return;
                 }
-                if(line.charAt(0) == '#') {
+                if (line.charAt(0) == '#') {
                     handleCommand(line.substring(1));
                     continue;
                 }

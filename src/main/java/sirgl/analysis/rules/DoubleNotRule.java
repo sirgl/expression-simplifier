@@ -19,10 +19,10 @@ public class DoubleNotRule implements ReplacementRule<Not> {
     @Override
     public Node tryReplace(Not node) {
         Node expression = node.getExpression();
-        if(expression.getClass().equals(ParenWrapper.class)) {
+        if (expression.getClass().equals(ParenWrapper.class)) {
             ParenWrapper parenWrapper = (ParenWrapper) expression;
             Node value = parenWrapper.getValue();
-            if(value.getClass().equals(Not.class)) {
+            if (value instanceof Not) {
                 return ((Not) value).getExpression();
             }
         }

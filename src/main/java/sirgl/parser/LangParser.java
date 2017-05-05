@@ -6,7 +6,10 @@ import sirgl.lexer.TokenType;
 import sirgl.nodes.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 public class LangParser implements Parser {
@@ -40,23 +43,23 @@ public class LangParser implements Parser {
 
 
     private void assertSuitableFirstToken(Set<TokenType> firstTokens) throws ParsingException {
-        if(nextToken == null) {
+        if (nextToken == null) {
             throw new UnexpectedTokensEnd(firstTokens);
         }
-        if(!firstTokens.contains(nextToken.getType())) {
+        if (!firstTokens.contains(nextToken.getType())) {
             throw new UnexpectedTokenException(nextToken, new ArrayList<>(firstTokens));
         }
     }
 
     private void lookAhead() throws IOException {
-        if(!lookAhead) {
+        if (!lookAhead) {
             nextToken = tokenStream.next();
             lookAhead = true;
         }
     }
 
     private void getNext() throws IOException {
-        if(lookAhead) {
+        if (lookAhead) {
             lookAhead = false;
         } else {
             nextToken = tokenStream.next();
@@ -77,7 +80,7 @@ public class LangParser implements Parser {
                 getNext();
                 Node expression = tryParseExpression(parenWrapper);
                 getNext();
-                if(nextToken.getType() != TokenType.Rparen) {
+                if (nextToken.getType() != TokenType.Rparen) {
                     throw new UnexpectedTokenException(nextToken, Collections.singletonList(TokenType.Rparen));
                 }
                 parenWrapper.setValue(expression);
@@ -89,7 +92,7 @@ public class LangParser implements Parser {
 
     private Node tryParseFactor(Node parent) throws IOException, ParsingException {
         assertSuitableFirstToken(firstFactorTokens);
-        if(nextToken.getType() == TokenType.Not) {
+        if (nextToken.getType() == TokenType.Not) {
             Not notNode = new Not(parent);
             getNext();
             Node primary = tryParsePrimary(notNode);
@@ -116,7 +119,7 @@ public class LangParser implements Parser {
         return tryParseExpression(null);
     }
 
-    private <T extends BinaryExpr>Node tryParseSequence(
+    private <T extends BinaryExpr> Node tryParseSequence(
             ParseFunction parseFunction,
             Node parent,
             TokenType operator,
@@ -137,7 +140,7 @@ public class LangParser implements Parser {
             left = top;
             lookAhead();
         }
-        if(top != null) {
+        if (top != null) {
             return top;
         }
         return first;

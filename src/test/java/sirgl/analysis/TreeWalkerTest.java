@@ -32,10 +32,10 @@ public class TreeWalkerTest {
         Node node = parseStr("(a AND b) OR c");
         Set<Class<?>> classes = new HashSet<>();
         new TreeWalker(node1 -> {
-            if(node1 == null) {
+            if (node1 == null) {
                 return null;
             }
-            if(node1.getClass().equals(ParenWrapper.class)) {
+            if (node1.getClass().equals(ParenWrapper.class)) {
                 return new Literal(null, false);
             }
             classes.add(node1.getClass());

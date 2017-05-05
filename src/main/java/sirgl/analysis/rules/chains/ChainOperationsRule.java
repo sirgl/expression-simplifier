@@ -1,7 +1,10 @@
 package sirgl.analysis.rules.chains;
 
 import sirgl.analysis.rules.ReplacementRule;
-import sirgl.nodes.*;
+import sirgl.nodes.BinaryExpr;
+import sirgl.nodes.Node;
+import sirgl.nodes.NodeUtils;
+import sirgl.nodes.Not;
 import sirgl.nodes.chains.OperandChain;
 
 import java.util.ArrayList;
@@ -9,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public abstract class ChainOperationsRule<T extends BinaryExpr> implements ReplacementRule<T> {
     @Override

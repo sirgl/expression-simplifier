@@ -16,10 +16,10 @@ public class TreeWalker {
     public void walk(Node node) {
         Node newNode = action.apply(node);
         List<Node> children;
-        if(newNode != null) {
+        if (newNode != null) {
             Node parent = newNode.getParent();
-            if(parent != null) {
-                if(parent.getClass().equals(ParenWrapper.class)) {
+            if (parent != null) {
+                if (parent instanceof ParenWrapper) {
                     walkParenWrapperParent(parent);
                 } else {
                     walk(parent);
@@ -37,7 +37,7 @@ public class TreeWalker {
 
     private void walkParenWrapperParent(Node parent) {
         Node parenParent = parent.getParent();
-        if(parenParent != null) {
+        if (parenParent != null) {
             walk(parenParent);
         } else {
             walk(parent);

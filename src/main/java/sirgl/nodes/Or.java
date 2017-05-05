@@ -21,7 +21,7 @@ public class Or extends BinaryExpr {
     }
 
     public OperandChain<Or> getOperandChain() {
-        if(operandChain != null && operandChain.isActive()) {
+        if (operandChain != null && operandChain.isActive()) {
             return operandChain;
         }
         operandChain = NodeUtils.buildMaxOperandChain(this);
@@ -34,7 +34,7 @@ public class Or extends BinaryExpr {
 
     @Override
     void invalidateChain() {
-        if(operandChain != null) {
+        if (operandChain != null) {
             operandChain.invalidate();
         }
     }

@@ -17,17 +17,17 @@ public class LiteralOrExprRule implements ReplacementRule<Or> {
 
     @Override
     public Node tryReplace(Or node) {
-        if(node.getLeft().getClass().equals(Literal.class)) {
+        if (node.getLeft().getClass().equals(Literal.class)) {
             Literal literal = (Literal) node.getLeft();
-            if(literal.getValue()) {
+            if (literal.getValue()) {
                 return literal;
             } else {
                 return node.getRight();
             }
-        } else if(node.getRight().getClass().equals(Literal.class)) {
+        } else if (node.getRight().getClass().equals(Literal.class)) {
             Literal literal = (Literal) node.getRight();
             boolean literalValue = literal.getValue();
-            if(literalValue) {
+            if (literalValue) {
                 return literal;
             } else {
                 return node.getLeft();

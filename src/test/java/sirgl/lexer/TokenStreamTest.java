@@ -86,7 +86,6 @@ public class TokenStreamTest {
     }
 
 
-
     @Test
     public void complicatedWithoutSpacing() throws Exception {
         assertThat(readUntilEof("(aANDb)OR(cANDNOTd)"))
