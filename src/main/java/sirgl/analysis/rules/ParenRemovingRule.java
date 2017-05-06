@@ -22,6 +22,7 @@ public class ParenRemovingRule implements ReplacementRule<ParenWrapper> {
         }
         Node inside = node.getValue();
         if (outside instanceof Or && inside instanceof And ||
+                outside instanceof And && inside instanceof Or ||
                 outside instanceof Not && inside instanceof Not) {
             return null;
         }
