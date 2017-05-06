@@ -4,10 +4,8 @@ import sirgl.analysis.AnalysisError;
 import sirgl.analysis.ErrorHighlight;
 import sirgl.analysis.ExpressionSimplifier;
 import sirgl.analysis.SimplificationResult;
-import sirgl.analysis.interceptors.ReplacementInterceptor;
 import sirgl.analysis.interceptors.StatisticsInterceptor;
 import sirgl.analysis.rules.ReplacementRule;
-import sirgl.nodes.Node;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -118,6 +116,11 @@ public class ConsoleInterface implements Runnable {
     }
 
     private void printHelp() {
-
+        System.out.println("This is an application for simplification of logical expression");
+        System.out.println("Commands:");
+        System.out.println("#debug on  -  to enable debugging");
+        System.out.println("#debug off  -  to disable debugging");
+        System.out.println("#stats  -  to show statistics on every rule");
+        System.out.println("quit  - to quit the application");
     }
 }

@@ -116,7 +116,11 @@ public class LangParser implements Parser {
     @Override
     public Node parse() throws IOException, ParsingException {
         getNext();
-        return tryParseExpression(null);
+        Node node = tryParseExpression(null);
+        if(nextToken != null) {
+            throw new UnexpectedTokenException(nextToken, Collections.emptyList());
+        }
+        return node;
     }
 
     private <T extends BinaryExpr> Node tryParseSequence(

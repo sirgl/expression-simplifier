@@ -43,9 +43,9 @@ public class Token {
 
         Token token = (Token) o;
 
-        if (startPosition != token.startPosition) return false;
-        if (type != token.type) return false;
-        return value.equals(token.value);
+        return startPosition == token.startPosition
+                && type == token.type
+                && value.equals(token.value);
     }
 
     @Override
