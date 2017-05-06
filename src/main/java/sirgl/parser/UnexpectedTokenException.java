@@ -13,4 +13,12 @@ public class UnexpectedTokenException extends ParsingException {
         this.token = token;
         this.possibleAlternatives = possibleAlternatives;
     }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public List<TokenType> getPossibleAlternatives() {
+        return possibleAlternatives;
+    }
 }

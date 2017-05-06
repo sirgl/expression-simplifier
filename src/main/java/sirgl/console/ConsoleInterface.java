@@ -1,6 +1,9 @@
 package sirgl.console;
 
+import sirgl.analysis.AnalysisError;
+import sirgl.analysis.ErrorHighlight;
 import sirgl.analysis.ExpressionSimplifier;
+import sirgl.analysis.SimplificationResult;
 import sirgl.analysis.interceptors.ReplacementInterceptor;
 import sirgl.analysis.interceptors.StatisticsInterceptor;
 import sirgl.analysis.rules.ReplacementRule;
@@ -9,7 +12,10 @@ import sirgl.nodes.Node;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ConsoleInterface implements Runnable {
     private final ExpressionSimplifier simplifier;
@@ -41,14 +47,14 @@ public class ConsoleInterface implements Runnable {
                 if (line.length() == 0) {
                     continue;
                 }
-                if (line.trim().equals("exit")) {
+                if (line.trim().equals("quit")) {
                     return;
                 }
                 if (line.charAt(0) == '#') {
                     handleCommand(line.substring(1));
                     continue;
                 }
-                System.out.println(simplifyExpression(line));
+                simplifyExpression(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,8 +77,36 @@ public class ConsoleInterface implements Runnable {
         }
     }
 
-    private Node simplifyExpression(String expr) {
-        return simplifier.simplify(expr).getResult();
+    private void simplifyExpression(String expr) {
+        SimplificationResult result = simplifier.simplify(expr);
+        if(result.hasErrors()) {
+            for (AnalysisError error : result.getErrors()) {
+                System.out.println("Parse error: " + error.getMessage());
+                System.out.println(expr);
+                printHighlights(error.getHighlights());
+            }
+            return;
+        }
+        System.out.println(result.getResult());
+    }
+
+    private void printHighlights(List<ErrorHighlight> highlightList) {
+        List<ErrorHighlight> sorted = highlightList.stream()
+                .sorted(Comparator.comparingInt(ErrorHighlight::getStart))
+                .collect(Collectors.toList());
+        int current = 0;
+        for (int i = 0; ; i++) {
+            ErrorHighlight currentHighlight = sorted.get(current);
+            if(currentHighlight.inRange(i)) {
+                System.out.print("^");
+            } else if (currentHighlight.getEnd() < i) {
+                current++;
+                if(sorted.size() == current) {
+                    System.out.println();
+                    return;
+                }
+            }
+        }
     }
 
     private void printStatistics() {

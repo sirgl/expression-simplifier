@@ -12,8 +12,12 @@ public class SimplificationResult {
         this.result = result;
     }
 
+    public SimplificationResult(List<AnalysisError> errors) {
+        this.errors = errors;
+    }
+
     public boolean hasErrors() {
-        return errors.size() > 0;
+        return errors != null && errors.size() > 0;
     }
 
     public List<AnalysisError> getErrors() {

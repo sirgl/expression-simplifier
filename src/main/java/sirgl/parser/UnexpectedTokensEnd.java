@@ -10,4 +10,8 @@ public class UnexpectedTokensEnd extends ParsingException {
     public UnexpectedTokensEnd(Set<TokenType> expectedTokens) {
         this.expectedTokens = expectedTokens;
     }
+
+    public Set<TokenType> getExpectedTokens() {
+        return expectedTokens;
+    }
 }

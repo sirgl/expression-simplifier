@@ -6,10 +6,7 @@ import sirgl.lexer.TokenType;
 import sirgl.nodes.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class LangParser implements Parser {
@@ -80,6 +77,9 @@ public class LangParser implements Parser {
                 getNext();
                 Node expression = tryParseExpression(parenWrapper);
                 getNext();
+                if(nextToken == null) {
+                    throw new UnexpectedTokensEnd(new HashSet<>(Collections.singletonList(TokenType.Rparen)));
+                }
                 if (nextToken.getType() != TokenType.Rparen) {
                     throw new UnexpectedTokenException(nextToken, Collections.singletonList(TokenType.Rparen));
                 }

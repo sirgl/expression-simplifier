@@ -1,5 +1,8 @@
 package sirgl.analysis;
 
+import sirgl.analysis.errors.BasicError;
+import sirgl.analysis.errors.UnexpectedEndOfTokens;
+import sirgl.analysis.errors.UnexpectedToken;
 import sirgl.analysis.interceptors.ChainInvalidatingInterceptor;
 import sirgl.analysis.interceptors.ReplacementInterceptor;
 import sirgl.analysis.rules.ReplacementRule;
@@ -8,6 +11,8 @@ import sirgl.nodes.Node;
 import sirgl.nodes.Root;
 import sirgl.parser.LangParser;
 import sirgl.parser.ParsingException;
+import sirgl.parser.UnexpectedTokenException;
+import sirgl.parser.UnexpectedTokensEnd;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -20,6 +25,7 @@ public class ExpressionSimplifier {
     private Map<Class<?>, List<ReplacementRule<Node>>> ruleMapPreEnter = new HashMap<>();
     private Map<Class<?>, List<ReplacementRule<Node>>> ruleMapPostEnter = new HashMap<>();
     private List<ReplacementInterceptor> interceptors = new ArrayList<>();
+    private List<AnalysisError> errors = new ArrayList<>();
 
     public ExpressionSimplifier(List<ReplacementRule> preEnterRules, List<ReplacementRule> postEnterRules, List<ReplacementInterceptor> interceptors) {
         this.interceptors.add(new ChainInvalidatingInterceptor());
@@ -28,12 +34,12 @@ public class ExpressionSimplifier {
         rulesToMap(postEnterRules, ruleMapPostEnter);
     }
 
-    public void addInterceptor(ReplacementInterceptor interceptor) {
-        interceptors.add(interceptor);
-    }
-
     public ExpressionSimplifier(List<ReplacementRule> preEnterRules, List<ReplacementRule> postEnterRules) {
         this(preEnterRules, postEnterRules, new ArrayList<>());
+    }
+
+    public void addInterceptor(ReplacementInterceptor interceptor) {
+        interceptors.add(interceptor);
     }
 
     private void rulesToMap(List<ReplacementRule> rules, Map<Class<?>, List<ReplacementRule<Node>>> ruleMap) {
@@ -56,10 +62,22 @@ public class ExpressionSimplifier {
             Node rootValue = root.getValue();
             rootValue.setParent(null);
             return new SimplificationResult(rootValue);
-        } catch (IOException | ParsingException e) {
-            e.printStackTrace(); // TODO
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (UnexpectedTokenException e) {
+            addError(new UnexpectedToken(e.getToken(), e.getPossibleAlternatives()));
+        } catch (UnexpectedTokensEnd e) {
+            addError(new UnexpectedEndOfTokens(e.getExpectedTokens(), str.length() - 1));
+        } catch (ParsingException e) {
+            addError(new BasicError(e.getMessage()));
         }
-        return null;
+        SimplificationResult result = new SimplificationResult(new ArrayList<>(errors));
+        errors.clear();
+        return result;
+    }
+
+    private void addError(AnalysisError error) {
+        errors.add(error);
     }
 
     private Node acceptNodeBeforeEnter(Node node) {
