@@ -20,6 +20,8 @@ public class ExpressionSimplifierTest {
             new DeMorganRule(),
             new LiteralAndExprRule(),
             new LiteralOrExprRule(),
+            new ParenRemovingRule()
+    ), Arrays.asList(
             new AndChainRule(),
             new OrChainRule()
     ));
@@ -46,9 +48,9 @@ public class ExpressionSimplifierTest {
                 {"NOT FALSE", "TRUE"},
                 {"NOT (NOT a)", "a"},
                 {"NOT (NOT TRUE)", "TRUE"},
-                {"NOT (a AND b)", "NOT (a) OR NOT (b)"},
-                {"NOT (a OR b)", "NOT (a) AND NOT (b)"},
-                {"NOT (a OR NOT b)", "NOT (a) AND b"},
+                {"NOT (a AND b)", "NOT a OR NOT b"},
+                {"NOT (a OR b)", "NOT a AND NOT b"},
+                {"NOT (a OR NOT b)", "NOT a AND b"},
                 {"NOT FALSE AND FALSE", "FALSE"},
                 {"NOT FALSE OR FALSE", "TRUE"},
                 {"a AND TRUE", "a"},
@@ -59,6 +61,10 @@ public class ExpressionSimplifierTest {
                 {"a OR b OR a", "a OR b"},
                 {"a OR a", "a"},
                 {"a OR NOT a", "TRUE"},
+                {"x OR x AND x", "x"},
+                {"NOT(NOT dog AND NOT cat AND NOT FALSE)", "dog OR cat"},
+                {"((x OR y) AND TRUE) AND (x OR y)", "x OR y"},
+                {"(((a)))", "a"}
         });
     }
 }

@@ -33,9 +33,14 @@ public class Or extends BinaryExpr {
     }
 
     @Override
-    void invalidateChain() {
+    public void invalidateChain() {
         if (operandChain != null) {
             operandChain.invalidate();
         }
+    }
+
+    @Override
+    public boolean isUppest() {
+        return getOperandChain().isTopOperand(this);
     }
 }

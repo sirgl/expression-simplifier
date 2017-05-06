@@ -26,4 +26,8 @@ public class OperandChain<T extends BinaryExpr> {
     public void invalidate() {
         isActive = false;
     }
+
+    public boolean isTopOperand(T node) {
+        return node.getRight().equals(operands.get(operands.size() - 1));
+    }
 }

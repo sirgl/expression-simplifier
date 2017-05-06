@@ -16,6 +16,9 @@ import java.util.function.Function;
 public abstract class ChainOperationsRule<T extends BinaryExpr> implements ReplacementRule<T> {
     @Override
     public Node tryReplace(T node) {
+        if(!node.isUppest()) {
+            return null;
+        }
         OperandChain<T> chain = getChain(node);
         List<Node> operands = chain.getOperands();
         Set<Node> positiveNodes = new HashSet<>();

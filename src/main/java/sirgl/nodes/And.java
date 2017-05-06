@@ -10,10 +10,15 @@ public class And extends BinaryExpr {
     }
 
     @Override
-    void invalidateChain() {
+    public void invalidateChain() {
         if (operandChain != null) {
             operandChain.invalidate();
         }
+    }
+
+    @Override
+    public boolean isUppest() {
+        return getOperandChain().isTopOperand(this);
     }
 
     @Override
