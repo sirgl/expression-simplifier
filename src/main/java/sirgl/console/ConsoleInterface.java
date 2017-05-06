@@ -97,11 +97,14 @@ public class ConsoleInterface implements Runnable {
             ErrorHighlight currentHighlight = sorted.get(current);
             if(currentHighlight.inRange(i)) {
                 System.out.print("^");
-            } else if (currentHighlight.getEnd() < i) {
-                current++;
-                if(sorted.size() == current) {
-                    System.out.println();
-                    return;
+            } else {
+                System.out.print(" ");
+                if (currentHighlight.getEnd() < i) {
+                    current++;
+                    if (sorted.size() == current) {
+                        System.out.println();
+                        return;
+                    }
                 }
             }
         }

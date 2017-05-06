@@ -118,7 +118,7 @@ public class LangParser implements Parser {
         getNext();
         Node node = tryParseExpression(null);
         if(nextToken != null) {
-            throw new UnexpectedTokenException(nextToken, Collections.emptyList());
+            throw new UnexpectedTokenException(nextToken, Arrays.asList(TokenType.And, TokenType.Or));
         }
         return node;
     }
